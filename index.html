@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <style>
+        body {
+        font-family: "Arial", sans-serif;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        background-color: black;
+        color: white;
+        }
+
+        #drop-zone {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 100%;
+        height: 100px;
+        padding: 1em;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        color: slategray;
+        cursor: pointer;
+        }
+
+        #drop-zone:hover {
+            border: 1px solid green;
+        }
+
+        #file-input {
+        display: none;
+        }
+
+        #preview {
+        width: 500px;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        list-style: none;
+        padding: 0;
+        }
+
+        #preview li {
+        display: flex;
+        align-items: center;
+        gap: 0.5em;
+        margin: 0;
+        width: 100%;
+        height: 100px;
+        }
+
+        #preview img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        }
+
+        video {
+            width: 500px;
+        }
+    </style>
+    
+    <h1 style="text-align: center;">🌙Good Night!🌙</h1>
+    <h1 style="text-align: center;">🌙Bless Your Dreams!🌙</h1>
+    
+    
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
+        <label id="drop-zone">
+        <h3 style="color: white;">❤️Click to upload❤️</h3>
+        <input type="file" id="file-input" multiple />
+        </label>
+        <h1 style="display: none; color: green;">You dropped files</h1>
+        <div id="preview"></div>
+        <button onclick="start()" style="background-color: black; color: white; width: 150px; height: 50px; border: 1px solid #cccccc; border-radius: 4px;">🛌Start race!🛌</button>
+    </div>
+    <p class="now"></p>
+    <p class="last"></p>
+
+    <script>
+        const dropzone = document.querySelector('#drop-zone')
+        const fileInput = document.querySelector('input')
+
+        dropzone.addEventListener('click', () => {
+            fileInput.click()
+        })
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files
+            for (let i of file) {
+                console.log('Uploaded ' + i.name, i.size)
+            }
+        })
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault()
+            dropzone.style.border = '1px solid green'
+        })
+
+        dropzone.addEventListener('dragleave', (e) => {
+            e.preventDefault()
+            dropzone.style.border = '1px solid #cccccc'
+        })
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault()
+            const files = e.dataTransfer.files
+            for (let file of files) {
+                console.log(file.name, file.size);
+            }
+        })
+        
+        const preview = document.querySelector('#preview')
+        
+        const src = []
+
+        function display(files) {
+            for (const file of files) {
+                const url = URL.createObjectURL(file);
+
+                if (file.type.startsWith("video/")) {
+                    const video = document.createElement("video");
+                    video.src = url;
+                    src.push(url)
+                    video.controls = true;
+                    video.style.width = "400px";
+                    preview.appendChild(video);
+                }
+            }
+        }
+        
+
+
+        fileInput.addEventListener('change', () => {
+            display(fileInput.files)
+            console.log(src)
+        })
+        
+        function start() {
+            const videos = Array.from(document.querySelectorAll('video'))
+
+            let currentIndex = 0
+
+            function playCurrentVideo() {
+                videos.forEach((video, index) => {
+                    if (index !== currentIndex) {
+                        video.pause()
+                        video.currentTime = 0
+                    }
+                })
+
+                const currentVideo = videos[currentIndex]
+                currentVideo.currentTime = 0
+                currentVideo.play()
+            }
+
+            videos.forEach((video, index) => {
+                video.onended = () => {
+                    currentIndex = (index + 1) % videos.length
+                    playCurrentVideo()
+                }
+            })
+
+            playCurrentVideo()
+        }
+
+    </script>
+
+    <script>
+        const lastHTML = document.querySelector('.last')
+        const nowHTML = document.querySelector('.now')
+
+        fetch('http://127.0.0.1:8000/date')
+        .then(res => res.json())
+        .then(data => {
+            const last = data.last
+            const now = data.now
+
+            lastHTML.textContent = 'Saw you here last time: ' + last
+            nowHTML.textContent = 'Now it is: ' + now
+        })
+        .catch(err => alert('cant get time'))
+
+    </script>
+
+</body>
+</html>
