@@ -83,8 +83,11 @@
     </div>
     <p class="now"></p>
     <p class="last"></p>
+    <button onclick='isInLoop=false'>Don't play in loop</button>
 
     <script>
+        isInLoop = true
+        
         const dropzone = document.querySelector('#drop-zone')
         const fileInput = document.querySelector('input')
 
@@ -162,9 +165,20 @@
             }
 
             videos.forEach((video, index) => {
-                video.onended = () => {
-                    currentIndex = (index + 1) % videos.length
-                    playCurrentVideo()
+                if (isInLoop) {
+                    video.onended = () => {
+                        currentIndex = (index + 1) % videos.length
+                        playCurrentVideo()
+                    }
+                } else if (!isInLoop) {
+                    video.onended = () => {
+                    // Only move forward if we haven't reached the last video
+                    if (currentIndex < videos.length - 1) {
+                        currentIndex++
+                        playCurrentVideo()
+                        }
+                    }
+
                 }
             })
 
