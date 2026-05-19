@@ -131,10 +131,22 @@
     </div>
     <p class="now"></p>
     <p class="last"></p>
-    <button onclick='isInLoop=false' class='btn-yellow-dark'>Don't play in loop</button>
+    <button onclick='setIsLoop()' class='btn-yellow-dark'>Set is in loop</button>
 
     <script>
         isInLoop = true
+        
+        function setIsLoop() {
+            if (isInLoop === true) {
+                isInLoop === false
+                alert('Playing NOT in loop')
+            } else if (isInLoop === false) {
+                isInLoop === true
+                alert('Playing in loop(dangerous!)')
+            }
+        }
+        
+        
         
         const dropzone = document.querySelector('#drop-zone')
         const fileInput = document.querySelector('input')
