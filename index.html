@@ -66,6 +66,53 @@
         video {
             width: 500px;
         }
+
+        .btn-yellow-dark {
+          /* Базовые стили */
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 12px 24px;
+          font-family: system-ui, -apple-system, sans-serif;
+          font-size: 16px;
+          font-weight: 600;
+          border: none;
+          border-radius: 12px;
+          cursor: pointer;
+          user-select: none;
+          
+          /* Цветовая палитра (Мягкий желтый и глубокий графитовый) */
+          background-color: #FFD43B;
+          color: #1A1A1A;
+          
+          /* Эффекты и тени */
+          box-shadow: 0 4px 6px -1px rgba(255, 212, 59, 0.2), 
+                      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          
+          /* Плавная анимация */
+          transition: all 0.2s ease-in-out;
+        }
+        
+        /* Состояние при наведении (Hover) */
+        .btn-yellow-dark:hover {
+          background-color: #FFE066; /* Чуть светлее */
+          transform: translateY(-1px); /* Легкое всплытие */
+          box-shadow: 0 10px 15px -3px rgba(255, 212, 59, 0.3);
+        }
+        
+        /* Состояние при нажатии (Active) */
+        .btn-yellow-dark:active {
+          background-color: #F59F00; /* Мягкий темный желтый */
+          transform: translateY(1px); /* Эффект физического нажатия */
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Сжатие тени */
+        }
+        
+        /* Состояние фокуса для доступности */
+        .btn-yellow-dark:focus-visible {
+          outline: 3px solid #1A1A1A;
+          outline-offset: 2px;
+        }
+        
     </style>
 
     <div style='color: yellow; background-color: red; width: 100vw; padding: 5px'>BUG NOTE! To drop ONE video it asks for TWO times! Carrefully!</div>
@@ -84,7 +131,7 @@
     </div>
     <p class="now"></p>
     <p class="last"></p>
-    <button onclick='isInLoop=false'>Don't play in loop</button>
+    <button onclick='isInLoop=false' class='btn-yellow-dark'>Don't play in loop</button>
 
     <script>
         isInLoop = true
